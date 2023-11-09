@@ -1,13 +1,16 @@
+const knex = require("../database/knex")
 class TagsController{
-    create(req,res){
-        const {id,id_user,id_note,name} = req.body
+    async index(request,response){
+        
+        const user_id = request.user.id
+        
+        const tags = await knex("moviestags")
+        .where({ id_user:user_id })
+        //groupBy é usado para agrupar pelo campo e não traz repetidos
+        .groupBy("name")
 
-        res.json({
-            id,
-            id_user,
-            id_note,
-            name,
-        })
+        
+        return response.json(tags)
     }
    
 }

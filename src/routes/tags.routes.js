@@ -1,10 +1,10 @@
 const {Router} = require("express")
 const useRoutes = Router()
-
+const ensureAuth = require("../middleware/ensureAuth")
 const TagsController = require("../controllers/TagsController")
 const tagsController = new TagsController
 
-useRoutes.post("/", tagsController.create)
+useRoutes.get("/", ensureAuth,tagsController.index)
   
 
 
