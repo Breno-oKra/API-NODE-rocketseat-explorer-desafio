@@ -10,7 +10,7 @@ class SessionController{
         
         //usamos o firt() somente para garantir que ele traga so um
         const user = await knex("users").where({email}).first()
-        console.log(`esse é o user: ${user}`)
+        
         if(!user){
             throw new AppError("Email ou senha incorreta")
         }
