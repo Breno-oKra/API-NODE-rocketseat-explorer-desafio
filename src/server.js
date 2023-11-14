@@ -1,3 +1,4 @@
+require("dotenv/config")
 require("express-async-errors");
 const AppError = require("./utils/AppError")
 const express = require("express")
@@ -24,8 +25,8 @@ app.use((error,req,res,next) => {
         message: error.message
     })
 })
-
-app.listen(3000, () => {
+const PORT = process.env.SERVER_PORT || 3333
+app.listen(PORT, () => {
     console.log("rodando cachorro")
 })
 
