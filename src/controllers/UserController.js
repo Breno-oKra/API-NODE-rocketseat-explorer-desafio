@@ -2,24 +2,15 @@ const { hash,compare } = require("bcryptjs");
 const knex = require("../database/knex");
 const sqliteConnection = require("../database/sqlite");
 const AppError = require("../utils/AppError");
+const UserRepository = require("../repositories/UserReposiroy")
+const UserCreateService = require("../services/UserCreateService")
 class UserController {
   async create(req, res) {
     const { name, email, password } = req.body;
+    const userRepository = new UserRepository()
+    const userCreateService = new UserCreateService(userRepository)
 
-    const database = await sqliteConnection();
-
-    const verify = await database.get("SELECT * FROM users WHERE email = (?)", [
-      email,
-    ]);
-    if (verify) {
-      throw new AppError("Email de Usuario Já Cadastrado");
-    }
-    const hashPassword = await hash(password, 8);
-    await database.run(
-      "INSERT INTO users (name,email,password) VALUES (?,?,?)",
-      [name, email, hashPassword]
-    );
-
+    await userCreateService.execute( { name, email, password })
     return res.status(201).json();
   }
   async update(request, response) {
